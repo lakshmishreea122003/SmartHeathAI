@@ -222,6 +222,95 @@ class PDFGenerator:
         lines.append(line)  # Add the last line
         return lines
 
+# FITNESS
+import requests
+import json
+# API keys and URLs
+NUTRITIONIX_API_KEY = 'key'  # Replace with your Nutritionix API key
+NUTRITIONIX_API_URL = 'https://api.nutritionix.com/v1_1/nutrition'
+EXERCISE_DB_BASE_URL = "https://exercisedb.p.rapidapi.com/exercises"
+querystring = {"limit":"10","offset":"0"}
+headers = {
+    "x-rapidapi-key": "980e388cd0mshea23d3731989f1bp15fa3ajsn98acceb2ae37",  # Replace with your RapidAPI key
+    "x-rapidapi-host": "exercisedb.p.rapidapi.com"
+}
+def get_exercises():
+    """
+    Fetch all exercises from ExerciseDB API.
+    Returns:
+        list: A list of exercises.
+    """
+    try:
+        response = requests.get(EXERCISE_DB_BASE_URL, headers=headers, params=querystring)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        return {"error": str(e)}
+
+def filter_exercises_by_body_type(exercises, body_type):
+    """
+    Filter exercises based on the body type.
+    Args:
+        exercises (list): List of exercises from ExerciseDB API.
+        body_type (str): The user's body type.
+    Returns:
+        list: A list of filtered exercises.
+    """
+    body_type_exercises = {
+        'ectomorph': ['full body', 'upper legs', 'lower legs'],
+        'mesomorph': ['strength', 'chest', 'back', 'upper arms'],
+        'endomorph': ['cardio', 'waist']
+    }
+
+    categories = body_type_exercises.get(body_type.lower(), ['full body'])
+
+    filtered_exercises = [
+        exercise for exercise in exercises
+        if any(category in exercise['bodyPart'] for category in categories)
+    ] 
+    return filtered_exercises
+def get_calorie_intake(body_type):
+    """
+    Calculate recommended calorie intake based on the body type.
+    Args:
+        body_type (str): The user's body type.
+    Returns:
+        dict: Calorie intake recommendation.
+    """
+    calorie_intake = {
+        'ectomorph': '2500 calories',
+        'mesomorph': '3000 calories',
+        'endomorph': '2000 calories'
+    }
+    intake = calorie_intake.get(body_type.lower(), '2500 calories')
+    return {"recommended_calorie_intake": intake}
+def fitness():
+    """
+    Main function to run the script. Prompts the user for body type and prints recommendations.
+    """
+    body_type = input("Enter your body type (ectomorph, mesomorph, endomorph): ").strip().lower()
+    
+    # Get all exercises from ExerciseDB API
+    exercises = get_exercises()
+    
+    if "error" in exercises:
+        print(json.dumps(exercises, indent=4))
+        return
+    # Filter exercises based on the body type
+    filtered_exercises = filter_exercises_by_body_type(exercises, body_type)
+    # Get calorie intake recommendation
+    calorie_intake = get_calorie_intake(body_type)
+    # Print the results in JSON format
+    result = {
+        "exercises": filtered_exercises,
+        "calorie_intake": calorie_intake
+    }
+    # Convert the result to a JSON string
+    result_json = json.dumps(result, indent=4)
+    # Convert the JSON string back to a Python dictionary
+    result_dict = json.loads(result_json)
+    return result_dict
+
 
 
 
