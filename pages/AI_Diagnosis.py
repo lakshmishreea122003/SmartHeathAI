@@ -231,7 +231,7 @@ NUTRITIONIX_API_URL = 'https://api.nutritionix.com/v1_1/nutrition'
 EXERCISE_DB_BASE_URL = "https://exercisedb.p.rapidapi.com/exercises"
 querystring = {"limit":"10","offset":"0"}
 headers = {
-    "x-rapidapi-key": "980e388cd0mshea23d3731989f1bp15fa3ajsn98acceb2ae37",  # Replace with your RapidAPI key
+    "x-rapidapi-key": "Your key",  # Replace with your RapidAPI key
     "x-rapidapi-host": "exercisedb.p.rapidapi.com"
 }
 def get_exercises():
