@@ -9,7 +9,7 @@ The inspiration for Smart Health AI came from recognizing the overburdened healt
   - Clinical text data (symptoms, treatments, medications)
   - Patient images analyzed using the gemini-1.5-pro-latest model
   - Lab reports extracted from PDFs using PyPDF2
-
+    
 - **Data Processing:**
   - Combines text, image, and lab data into a comprehensive dataset
   - De-identifies patient data for privacy
@@ -30,6 +30,5 @@ The inspiration for Smart Health AI came from recognizing the overburdened healt
 
 - **Nutritional Analysis:**
   - Integrated with Edamam API for nutritional content analysis
-  - Generates personalized recipes based on patient data and preferences
+  - Generates personalized recipes based on patient data and preferences using the power of RAG and Edamam API.
 
- How We 
